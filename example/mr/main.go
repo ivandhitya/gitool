@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/go-resty/resty/v2"
-	"github.com/ivandhitya/gitools/mr"
+	"github.com/ivandhitya/gitool/mr"
 )
 
 const (
@@ -34,6 +34,5 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(b)
 	fmt.Println(string(b))
 }

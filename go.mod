@@ -1,4 +1,4 @@
-module github.com/ivandhitya/gitools
+module github.com/ivandhitya/gitool
 
 go 1.16
 

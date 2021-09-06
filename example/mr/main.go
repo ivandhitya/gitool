@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	TOKEN   = "RDtQTMLazZRVSy2ZL4v1"       // add your token here
+	TOKEN   = ""                           // add your token here
 	ADDRESS = "https://gitlab.linkaja.com" // add your gitlab repository here
 )
 
@@ -18,8 +18,7 @@ func main() {
 	mrClient := mr.NewRestMergeRequest(ADDRESS, TOKEN, client)
 	req := make(mr.ReqMR)
 	projectID := 683
-	req.AddProjectID(projectID).
-		AddSourceBranch("test-api-to-merge").
+	req.AddSourceBranch("test-api-to-merge").
 		AddTargetBranch("test-api").
 		AddTitle("testing merge by api").
 		AddDescription("just testing")

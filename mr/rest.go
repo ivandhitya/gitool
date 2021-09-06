@@ -24,6 +24,7 @@ func NewRestMergeRequest(url, token string, client *resty.Client) RestMergeReque
 }
 
 func (mr *RestMergeRequest) CreateMR(projectID int, formData ReqMR) (RespMR, error) {
+	formData.AddProjectID(projectID)
 	path := fmt.Sprintf(PATH, mr.url, projectID)
 	resp := RespMR{}
 

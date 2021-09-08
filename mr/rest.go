@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	resty "github.com/go-resty/resty/v2"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -31,15 +32,20 @@ func (mr *RestMergeRequest) CreateMR(projectID int, formData ReqMR) (RespMR, err
 
 	respOrigin, err := mr.client.R().SetAuthToken(mr.token).SetFormData(formData).Post(path)
 	if err != nil {
+		logrus.Trace(err)
 		return resp, err
 	}
 	respBody := respOrigin.Body()
 	if err := json.Unmarshal(respBody, &resp); err != nil {
-		return resp, errors.New(fmt.Sprintf("%v %s", err, string(respBody)))
+		errr := errors.New(fmt.Sprintf("%v %s", err, string(respBody)))
+		logrus.Trace(errr)
+		return resp, errr
 	}
 	status := respOrigin.StatusCode()
 	if status != http.StatusAccepted && status != http.StatusCreated && status != http.StatusOK {
-		return resp, errors.New(fmt.Sprintf("http status: %d, %s,message: %v", respOrigin.StatusCode(), respOrigin.Status(), resp.Message))
+		errr := errors.New(fmt.Sprintf("http status: %s, message: %v", respOrigin.Status(), resp.Message))
+		logrus.Trace(errr)
+		return resp, errr
 	}
 
 	return resp, nil
@@ -51,15 +57,20 @@ func (mr *RestMergeRequest) AcceptMR(projectID, mergeIID int, formData ReqAccept
 
 	respOrigin, err := mr.client.R().SetAuthToken(mr.token).SetFormData(formData).Put(path)
 	if err != nil {
+		logrus.Trace(err)
 		return resp, err
 	}
 	respBody := respOrigin.Body()
 	if err := json.Unmarshal(respBody, &resp); err != nil {
-		return resp, errors.New(fmt.Sprintf("%v %s", err, string(respBody)))
+		errr := errors.New(fmt.Sprintf("%v %s", err, string(respBody)))
+		logrus.Trace(errr)
+		return resp, errr
 	}
 	status := respOrigin.StatusCode()
 	if status != http.StatusAccepted && status != http.StatusCreated && status != http.StatusOK {
-		return resp, errors.New(fmt.Sprintf("http status: %s, message: %v", respOrigin.Status(), resp.Message))
+		errr := errors.New(fmt.Sprintf("http status: %s, message: %v", respOrigin.Status(), resp.Message))
+		logrus.Trace(errr)
+		return resp, errr
 	}
 
 	return resp, nil

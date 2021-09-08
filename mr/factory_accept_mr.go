@@ -23,6 +23,12 @@ func (r *ReqAcceptMR) AddMergeCommitMessage(val string) *ReqAcceptMR {
 	return r
 }
 
+// AddSquash is a function for Add Squash value in ReqAcceptMR type
+func (r *ReqAcceptMR) AddSquash(val bool) *ReqAcceptMR {
+	(*r)[KeyDataSquash] = strconv.FormatBool(val)
+	return r
+}
+
 //AddSquashCommitMessage is a fuction for Add SquashCommitMessage value in ReqAcceptMR type
 func (r *ReqAcceptMR) AddSquashCommitMessage(val string) *ReqAcceptMR {
 	(*r)[KeyDataSquashCommitMessage] = val
@@ -30,14 +36,14 @@ func (r *ReqAcceptMR) AddSquashCommitMessage(val string) *ReqAcceptMR {
 }
 
 //AddShouldRemoveSourceBranch is a fuction for Add ShouldRemoveSourceBranch value in ReqAcceptMR type
-func (r *ReqAcceptMR) AddShouldRemoveSourceBranch(val string) *ReqAcceptMR {
-	(*r)[KeyDataShouldRemoveSourceBranch] = val
+func (r *ReqAcceptMR) AddShouldRemoveSourceBranch(val bool) *ReqAcceptMR {
+	(*r)[KeyDataShouldRemoveSourceBranch] = strconv.FormatBool(val)
 	return r
 }
 
 //AddMergeWhenPipelineSucceeds is a fuction for Add MergeWhenPipelineSucceeds value in ReqAcceptMR type
-func (r *ReqAcceptMR) AddMergeWhenPipelineSucceeds(val string) *ReqAcceptMR {
-	(*r)[KeyDataMergeWhenPipelineSucceeds] = val
+func (r *ReqAcceptMR) AddMergeWhenPipelineSucceeds(val bool) *ReqAcceptMR {
+	(*r)[KeyDataMergeWhenPipelineSucceeds] = strconv.FormatBool(val)
 	return r
 }
 

@@ -10,7 +10,8 @@ import (
 )
 
 const (
-	PATH = "%s/api/v4/projects/%d/merge_requests"
+	PATH_MR        = "%s/api/v4/projects/%d/merge_requests"
+	PATH_ACCEPT_MR = "%s/api/v4/projects/%d/merge_requests/%d/merge"
 )
 
 type RestMergeRequest struct {
@@ -25,7 +26,7 @@ func NewRestMergeRequest(url, token string, client *resty.Client) RestMergeReque
 
 func (mr *RestMergeRequest) CreateMR(projectID int, formData ReqMR) (RespMR, error) {
 	formData.AddProjectID(projectID)
-	path := fmt.Sprintf(PATH, mr.url, projectID)
+	path := fmt.Sprintf(PATH_MR, mr.url, projectID)
 	resp := RespMR{}
 
 	respOrigin, err := mr.client.R().SetAuthToken(mr.token).SetFormData(formData).Post(path)
@@ -38,7 +39,27 @@ func (mr *RestMergeRequest) CreateMR(projectID int, formData ReqMR) (RespMR, err
 	}
 	status := respOrigin.StatusCode()
 	if status != http.StatusAccepted && status != http.StatusCreated && status != http.StatusOK {
-		return resp, errors.New(fmt.Sprintf("%v", resp.Message))
+		return resp, errors.New(fmt.Sprintf("http status: %d, %s,message: %v", respOrigin.StatusCode(), respOrigin.Status(), resp.Message))
+	}
+
+	return resp, nil
+}
+
+func (mr *RestMergeRequest) AcceptMR(projectID, mergeIID int, formData ReqAcceptMR) (RespAcceptMR, error) {
+	path := fmt.Sprintf(PATH_ACCEPT_MR, mr.url, projectID, mergeIID)
+	resp := RespAcceptMR{}
+
+	respOrigin, err := mr.client.R().SetAuthToken(mr.token).SetFormData(formData).Put(path)
+	if err != nil {
+		return resp, err
+	}
+	respBody := respOrigin.Body()
+	if err := json.Unmarshal(respBody, &resp); err != nil {
+		return resp, errors.New(fmt.Sprintf("%v %s", err, string(respBody)))
+	}
+	status := respOrigin.StatusCode()
+	if status != http.StatusAccepted && status != http.StatusCreated && status != http.StatusOK {
+		return resp, errors.New(fmt.Sprintf("http status: %s, message: %v", respOrigin.Status(), resp.Message))
 	}
 
 	return resp, nil

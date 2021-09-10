@@ -1,7 +1,7 @@
 package mr
 
 const (
-	KeyDataID                        = "id"
+	KeyDataID                        = "id"                           //yes The project ID
 	KeyDataSourceBranch              = "source_branch"                //yes	The source branch.
 	KeyDataTargetBranch              = "target_branch"                //yes	The target branch.
 	KeyDataTitle                     = "title"                        //yes	Title of MR.

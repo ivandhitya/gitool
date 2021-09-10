@@ -11,19 +11,18 @@ import (
 )
 
 const (
-	TOKEN   = ""                   // add your token here
-	ADDRESS = "https://gitlab.com" // add your gitlab repository here
+	TOKEN   = "vYRx6yhxtdtTTseF_KfW" // add your token here
+	ADDRESS = "https://gitlab.com"   // add your gitlab repository here
 )
 
 func main() {
 	// logrus formater example
 	logrus.SetReportCaller(true)
-	formatter := &logrus.TextFormatter{
+	formatter := &logrus.JSONFormatter{
 		CallerPrettyfier: func(f *runtime.Frame) (string, string) {
 			filename := path.Base(f.File)
 			return fmt.Sprintf("%s()", f.Function), fmt.Sprintf("%s:%d", filename, f.Line)
 		},
-		DisableColors: false,
 	}
 
 	logrus.SetFormatter(formatter)
@@ -36,26 +35,37 @@ func main() {
 	req := make(mr.ReqMR)
 
 	// Merge Request
-	req.AddSourceBranch("DC-222_test1").
+	req.AddSourceBranch("DC-223_test3").
 		AddTargetBranch("development").
-		AddTitle("testing merge by api test2").
-		AddDescription("just testing 2")
+		AddTitle("testing merge by api test3").
+		AddDescription("just testing 3")
 
 	resp, err := mrClient.CreateMR(projectID, req)
 	if err != nil {
 		logrus.Error(err)
+		resp, err := mrClient.DeleteMR(projectID, resp.IID)
+		if err != nil {
+			logrus.Error(err)
+			return
+		}
+		logrus.Info(resp)
 		return
 	}
 	logrus.Info(resp)
 
 	// Accept MR
 	reqAccept := make(mr.ReqAcceptMR)
-	reqAccept.AddMergeRequestIID(resp.IID).
-		AddShouldRemoveSourceBranch(true)
+	reqAccept.AddShouldRemoveSourceBranch(true)
 
 	respAccept, err := mrClient.AcceptMR(projectID, resp.IID, reqAccept)
 	if err != nil {
 		logrus.Error(err)
+		resp, err := mrClient.DeleteMR(projectID, resp.IID)
+		if err != nil {
+			logrus.Error(err)
+			return
+		}
+		logrus.Info(resp)
 		return
 	}
 	logrus.Info(respAccept)

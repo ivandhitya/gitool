@@ -6,16 +6,15 @@ import (
 	"runtime"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/ivandhitya/gitool/example"
 	"github.com/ivandhitya/gitool/mr"
 	"github.com/sirupsen/logrus"
 )
 
-const (
-	TOKEN   = "vYRx6yhxtdtTTseF_KfW" // add your token here
-	ADDRESS = "https://gitlab.com"   // add your gitlab repository here
-)
-
 func main() {
+	conf := example.Conf{}
+	conf.GetConf()
+
 	// logrus formater example
 	logrus.SetReportCaller(true)
 	formatter := &logrus.JSONFormatter{
@@ -29,7 +28,7 @@ func main() {
 	logrus.SetLevel(logrus.DebugLevel)
 
 	client := resty.New()
-	mrClient := mr.NewRestMergeRequest(ADDRESS, TOKEN, client)
+	mrClient := mr.NewRestMergeRequest(conf.Gitlab.Address, conf.Gitlab.Token, client)
 	projectID := 17619669
 
 	req := make(mr.ReqMR)

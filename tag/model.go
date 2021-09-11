@@ -1,6 +1,6 @@
 package tag
 
-type Tag struct {
+type TagModel struct {
 	Commit struct {
 		ID             string   `json:"id"`
 		ShortID        string   `json:"short_id"`

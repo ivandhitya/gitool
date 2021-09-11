@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/ivandhitya/gitool/example"
-	"github.com/ivandhitya/gitool/tag"
+	"github.com/ivandhitya/gitool/release"
 	"github.com/sirupsen/logrus"
 )
 
@@ -27,28 +27,21 @@ func main() {
 	logrus.SetFormatter(formatter)
 	logrus.SetLevel(logrus.DebugLevel)
 	client := resty.New()
-	tagClient := tag.NewRestTag(conf.Gitlab.Address, conf.Gitlab.Token, client)
+	releaseClient := release.NewRestRelease(conf.Gitlab.Address, conf.Gitlab.Token, client)
 	projectID := 17619669
 
-	// Get All Tag
-	req := make(tag.ReqGetTagList)
-	resp, err := tagClient.GetAllTag(projectID, req)
+	// Create release
+	req := make(release.ReqCreateRelease)
+	tagName := "v1.1.1"
+	releaseNote := `- [DC-518: [Tech Initiate] Drop Groot database connection in bernoulli](https://tcashsquad.atlassian.net/browse/DC-518)  
+test new line with API`
+	req.AddDescription(releaseNote).
+		AddTagName(tagName).
+		AddName(tagName)
+	resp, err := releaseClient.CreateRelease(projectID, req)
 	if err != nil {
 		logrus.Error(err)
 		return
 	}
 	logrus.Debug(resp)
-
-	// Create new tag
-	reqCreateTag := make(tag.ReqCreateTag)
-	reqCreateTag.AddRef("master")
-	reqCreateTag.AddMessage("test tag from api")
-	reqCreateTag.AddTagName("v1.1.1")
-	respCreate, err := tagClient.CreateTag(projectID, reqCreateTag)
-	if err != nil {
-		logrus.Error(err)
-		return
-	}
-	logrus.Debug(respCreate)
-
 }

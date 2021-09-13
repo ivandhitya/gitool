@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	resty "github.com/go-resty/resty/v2"
+	"github.com/ivandhitya/gitool/model"
 	"github.com/sirupsen/logrus"
 )
 
@@ -16,21 +16,19 @@ const (
 )
 
 type RestRelease struct {
-	url    string
-	token  string
-	client *resty.Client
+	gitConfig *model.GitConfig
 }
 
-func NewRestRelease(url, token string, client *resty.Client) RestRelease {
-	return RestRelease{url, token, client}
+func NewRestRelease(gitConfig *model.GitConfig) RestRelease {
+	return RestRelease{gitConfig}
 }
 
 func (r *RestRelease) UpdateRelease(projectID int, tagName string, formData ReqUpdateRelease) (ReleaseModel, error) {
 	formData.AddProjectID(projectID)
-	path := fmt.Sprintf(PATH_DEF_RELEASE, r.url, projectID, tagName)
+	path := fmt.Sprintf(PATH_DEF_RELEASE, r.gitConfig.URL, projectID, tagName)
 	resp := ReleaseModel{}
 
-	respOrigin, err := r.client.R().SetAuthToken(r.token).SetFormData(formData).Put(path)
+	respOrigin, err := r.gitConfig.Client.R().SetAuthToken(r.gitConfig.Token).SetFormData(formData).Put(path)
 	if err != nil {
 		logrus.Trace(err)
 		return resp, err
@@ -53,10 +51,10 @@ func (r *RestRelease) UpdateRelease(projectID int, tagName string, formData ReqU
 
 func (r *RestRelease) CreateRelease(projectID int, formData ReqCreateRelease) (ReleaseModel, error) {
 	formData.AddProjectID(projectID)
-	path := fmt.Sprintf(PATH_CREATE_RELEASE, r.url, projectID)
+	path := fmt.Sprintf(PATH_CREATE_RELEASE, r.gitConfig.URL, projectID)
 	resp := ReleaseModel{}
 
-	respOrigin, err := r.client.R().SetAuthToken(r.token).SetFormData(formData).Post(path)
+	respOrigin, err := r.gitConfig.Client.R().SetAuthToken(r.gitConfig.Token).SetFormData(formData).Post(path)
 	if err != nil {
 		logrus.Trace(err)
 		return resp, err

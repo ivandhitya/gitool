@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/ivandhitya/gitool/example"
+	"github.com/ivandhitya/gitool/model"
 	"github.com/ivandhitya/gitool/mr"
 	"github.com/sirupsen/logrus"
 )
@@ -28,7 +29,13 @@ func main() {
 	logrus.SetLevel(logrus.DebugLevel)
 
 	client := resty.New()
-	mrClient := mr.NewRestMergeRequest(conf.Gitlab.Address, conf.Gitlab.Token, client)
+	gitConfig := &model.GitConfig{
+		Client: client,
+		URL:    conf.Gitlab.Address,
+		Token:  conf.Gitlab.Token,
+	}
+
+	mrClient := mr.NewRestMergeRequest(gitConfig)
 	projectID := 17619669
 
 	req := make(mr.ReqMR)

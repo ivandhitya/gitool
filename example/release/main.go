@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/ivandhitya/gitool/example"
+	"github.com/ivandhitya/gitool/model"
 	"github.com/ivandhitya/gitool/release"
 	"github.com/sirupsen/logrus"
 )
@@ -26,8 +27,15 @@ func main() {
 
 	logrus.SetFormatter(formatter)
 	logrus.SetLevel(logrus.DebugLevel)
+
 	client := resty.New()
-	releaseClient := release.NewRestRelease(conf.Gitlab.Address, conf.Gitlab.Token, client)
+	gitConfig := &model.GitConfig{
+		Client: client,
+		URL:    conf.Gitlab.Address,
+		Token:  conf.Gitlab.Token,
+	}
+
+	releaseClient := release.NewRestRelease(gitConfig)
 	projectID := 17619669
 
 	// Create release

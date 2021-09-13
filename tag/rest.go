@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	resty "github.com/go-resty/resty/v2"
+	"github.com/ivandhitya/gitool/model"
 	"github.com/sirupsen/logrus"
 )
 
@@ -15,21 +15,19 @@ const (
 )
 
 type RestTag struct {
-	url    string
-	token  string
-	client *resty.Client
+	gitConfig *model.GitConfig
 }
 
-func NewRestTag(url, token string, client *resty.Client) RestTag {
-	return RestTag{url, token, client}
+func NewRestTag(gitConfig *model.GitConfig) RestTag {
+	return RestTag{gitConfig}
 }
 
 func (r *RestTag) GetAllTag(projectID int, formData ReqGetTagList) ([]TagModel, error) {
 	formData.AddProjectID(projectID)
-	path := fmt.Sprintf(PATH_DEF_TAG, r.url, projectID)
+	path := fmt.Sprintf(PATH_DEF_TAG, r.gitConfig.URL, projectID)
 	resp := []TagModel{}
 
-	respOrigin, err := r.client.R().SetAuthToken(r.token).SetFormData(formData).Get(path)
+	respOrigin, err := r.gitConfig.Client.R().SetAuthToken(r.gitConfig.Token).SetFormData(formData).Get(path)
 	if err != nil {
 		logrus.Trace(err)
 		return resp, err
@@ -52,10 +50,10 @@ func (r *RestTag) GetAllTag(projectID int, formData ReqGetTagList) ([]TagModel, 
 
 func (r *RestTag) CreateTag(projectID int, formData ReqCreateTag) (TagModel, error) {
 	formData.AddProjectID(projectID)
-	path := fmt.Sprintf(PATH_DEF_TAG, r.url, projectID)
+	path := fmt.Sprintf(PATH_DEF_TAG, r.gitConfig.URL, projectID)
 	resp := TagModel{}
 
-	respOrigin, err := r.client.R().SetAuthToken(r.token).SetFormData(formData).Post(path)
+	respOrigin, err := r.gitConfig.Client.R().SetAuthToken(r.gitConfig.Token).SetFormData(formData).Post(path)
 	if err != nil {
 		logrus.Trace(err)
 		return resp, err

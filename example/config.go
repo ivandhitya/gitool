@@ -14,8 +14,8 @@ type Conf struct {
 	} `yaml:"gitlab"`
 }
 
-func (c *Conf) GetConf() *Conf {
-	yamlFile, err := ioutil.ReadFile(".gitool.yaml")
+func (c *Conf) GetConf(path string) *Conf {
+	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		logrus.Error("yamlFile.Get err   #%v ", err)
 	}

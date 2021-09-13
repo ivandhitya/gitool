@@ -14,7 +14,7 @@ import (
 
 func main() {
 	conf := example.Conf{}
-	conf.GetConf()
+	conf.GetConf("../../.gitool.yaml")
 
 	// logrus formater example
 	logrus.SetReportCaller(true)

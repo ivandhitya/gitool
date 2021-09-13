@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"path"
 	"runtime"
+	"time"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/ivandhitya/gitool/commit"
 	"github.com/ivandhitya/gitool/example"
 	"github.com/ivandhitya/gitool/model"
-	"github.com/ivandhitya/gitool/release"
 	"github.com/sirupsen/logrus"
 )
 
@@ -35,18 +36,14 @@ func main() {
 		Token:  conf.Gitlab.Token,
 	}
 
-	releaseClient := release.NewRestRelease(gitConfig)
+	commitClient := commit.NewRestCommit(gitConfig)
 	projectID := 17619669
 
-	// Create release
-	req := make(release.ReqCreateRelease)
-	tagName := "v1.1.1"
-	releaseNote := `- [DC-518: [Tech Initiate] Drop Groot database connection in bernoulli](https://tcashsquad.atlassian.net/browse/DC-518)  
-test new line with API`
-	req.AddDescription(releaseNote).
-		AddTagName(tagName).
-		AddName(tagName)
-	resp, err := releaseClient.CreateRelease(projectID, req)
+	// Get All Commits
+	req := make(commit.ReqGetCommitList)
+	since := time.Now().AddDate(0, -1, 0).Format("2006-01-02T15:04:05Z")
+	req.AddRefName("master").AddFirstParent(true).AddSince(since)
+	resp, err := commitClient.GetCommit(projectID, req)
 	if err != nil {
 		logrus.Error(err)
 		return

@@ -23,7 +23,7 @@ func NewRestCommit(gitConfig *model.GitConfig) RestCommit {
 }
 
 func (r *RestCommit) GetCommit(projectID int, formData ReqGetCommitList) ([]CommitModel, error) {
-	// formData.AddProjectID(projectID)
+	formData.AddProjectID(projectID)
 	path := fmt.Sprintf(PATH_LIST_COMMIT, r.gitConfig.URL, projectID)
 	resp := []CommitModel{}
 

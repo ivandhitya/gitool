@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"path"
 	"runtime"
-	"time"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/ivandhitya/gitool/commit"
@@ -29,7 +28,7 @@ func main() {
 	logrus.SetFormatter(formatter)
 	logrus.SetLevel(logrus.DebugLevel)
 
-	client := resty.New()
+	client := resty.New().SetAllowGetMethodPayload(true)
 	gitConfig := &model.GitConfig{
 		Client: client,
 		URL:    conf.Gitlab.Address,
@@ -37,12 +36,12 @@ func main() {
 	}
 
 	commitClient := commit.NewRestCommit(gitConfig)
-	projectID := 17619669
+	projectID := 224
 
 	// Get All Commits
 	req := make(commit.ReqGetCommitList)
-	since := time.Now().AddDate(0, -1, 0).Format("2006-01-02T15:04:05Z")
-	req.AddRefName("master").AddFirstParent(true).AddSince(since)
+	// since := time.Now().AddDate(0, -1, 0).Format("2006-01-02T15:04:05Z")
+	req.AddRefName("test-kafka-consumer-confirm").AddFirstParent(true) //.AddSince(since)
 	resp, err := commitClient.GetCommit(projectID, req)
 	if err != nil {
 		logrus.Error(err)

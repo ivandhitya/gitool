@@ -27,7 +27,7 @@ func main() {
 
 	logrus.SetFormatter(formatter)
 	logrus.SetLevel(logrus.DebugLevel)
-	client := resty.New()
+	client := resty.New().SetAllowGetMethodPayload(true)
 	gitConfig := &model.GitConfig{
 		Client: client,
 		URL:    conf.Gitlab.Address,

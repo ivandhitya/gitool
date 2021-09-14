@@ -22,7 +22,7 @@ func NewRestTag(gitConfig *model.GitConfig) RestTag {
 	return RestTag{gitConfig}
 }
 
-func (r *RestTag) GetAllTag(projectID int, formData ReqGetTagList) ([]TagModel, error) {
+func (r *RestTag) GetAllTag(projectID interface{}, formData ReqGetTagList) ([]TagModel, error) {
 	formData.AddProjectID(projectID)
 	path := fmt.Sprintf(PATH_DEF_TAG, r.gitConfig.URL, projectID)
 	resp := []TagModel{}
@@ -48,7 +48,7 @@ func (r *RestTag) GetAllTag(projectID int, formData ReqGetTagList) ([]TagModel, 
 	return resp, nil
 }
 
-func (r *RestTag) CreateTag(projectID int, formData ReqCreateTag) (TagModel, error) {
+func (r *RestTag) CreateTag(projectID interface{}, formData ReqCreateTag) (TagModel, error) {
 	formData.AddProjectID(projectID)
 	path := fmt.Sprintf(PATH_DEF_TAG, r.gitConfig.URL, projectID)
 	resp := TagModel{}

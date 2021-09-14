@@ -38,9 +38,10 @@ func main() {
 	commitClient := commit.NewRestCommit(gitConfig)
 	projectID := 224
 
-	// Get All Commits
+	// Get Commits
 	req := make(commit.ReqGetCommitList)
 	// since := time.Now().AddDate(0, -1, 0).Format("2006-01-02T15:04:05Z")
+	// since := time.Now().Add(time.Duration(-2 * time.Da)).Format("2006-01-02T15:04:05Z")
 	req.AddRefName("test-kafka-consumer-confirm").AddFirstParent(true) //.AddSince(since)
 	resp, err := commitClient.GetCommit(projectID, req)
 	if err != nil {

@@ -1,13 +1,16 @@
 package mr
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 // ReqAcceptMR is a type for accept merge request data form
 type ReqAcceptMR map[string]string
 
 // AddProjectID is a function for Add ProjectID value in ReqAcceptMR type (*required)
-func (r *ReqAcceptMR) AddProjectID(projectID int) *ReqAcceptMR {
-	(*r)[KeyDataID] = strconv.Itoa(projectID)
+func (r *ReqAcceptMR) AddProjectID(val interface{}) *ReqAcceptMR {
+	(*r)[KeyDataID] = fmt.Sprintf("%v", val)
 	return r
 }
 

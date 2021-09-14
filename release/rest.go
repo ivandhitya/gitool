@@ -23,7 +23,7 @@ func NewRestRelease(gitConfig *model.GitConfig) RestRelease {
 	return RestRelease{gitConfig}
 }
 
-func (r *RestRelease) UpdateRelease(projectID int, tagName string, formData ReqUpdateRelease) (ReleaseModel, error) {
+func (r *RestRelease) UpdateRelease(projectID interface{}, tagName string, formData ReqUpdateRelease) (ReleaseModel, error) {
 	formData.AddProjectID(projectID)
 	path := fmt.Sprintf(PATH_DEF_RELEASE, r.gitConfig.URL, projectID, tagName)
 	resp := ReleaseModel{}
@@ -49,7 +49,7 @@ func (r *RestRelease) UpdateRelease(projectID int, tagName string, formData ReqU
 	return resp, nil
 }
 
-func (r *RestRelease) CreateRelease(projectID int, formData ReqCreateRelease) (ReleaseModel, error) {
+func (r *RestRelease) CreateRelease(projectID interface{}, formData ReqCreateRelease) (ReleaseModel, error) {
 	formData.AddProjectID(projectID)
 	path := fmt.Sprintf(PATH_CREATE_RELEASE, r.gitConfig.URL, projectID)
 	resp := ReleaseModel{}

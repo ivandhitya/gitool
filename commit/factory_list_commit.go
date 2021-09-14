@@ -1,14 +1,15 @@
 package commit
 
 import (
+	"fmt"
 	"strconv"
 )
 
 type ReqGetCommitList map[string]string
 
 // AddProjectID is a function for Add ProjectID value in ReqGetCommitList type (*required)
-func (r *ReqGetCommitList) AddProjectID(val int) *ReqGetCommitList {
-	(*r)[KeyDataID] = strconv.Itoa(val)
+func (r *ReqGetCommitList) AddProjectID(val interface{}) *ReqGetCommitList {
+	(*r)[KeyDataID] = fmt.Sprintf("%v", val)
 	return r
 }
 

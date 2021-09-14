@@ -1,14 +1,12 @@
 package tag
 
-import (
-	"strconv"
-)
+import "fmt"
 
 type ReqCreateTag map[string]string
 
 // AddProjectID is a function for Add ProjectID value in ReqCreateTag type (*required)
-func (r *ReqCreateTag) AddProjectID(projectID int) *ReqCreateTag {
-	(*r)[KeyDataID] = strconv.Itoa(projectID)
+func (r *ReqCreateTag) AddProjectID(val interface{}) *ReqCreateTag {
+	(*r)[KeyDataID] = fmt.Sprintf("%v", val)
 	return r
 }
 

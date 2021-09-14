@@ -24,7 +24,7 @@ func NewRestMergeRequest(gitConfig *model.GitConfig) RestMergeRequest {
 	return RestMergeRequest{gitConfig}
 }
 
-func (mr *RestMergeRequest) CreateMR(projectID int, formData ReqMR) (RespMR, error) {
+func (mr *RestMergeRequest) CreateMR(projectID interface{}, formData ReqMR) (RespMR, error) {
 	formData.AddProjectID(projectID)
 	path := fmt.Sprintf(PATH_MR, mr.gitConfig.URL, projectID)
 	resp := RespMR{}
@@ -50,7 +50,7 @@ func (mr *RestMergeRequest) CreateMR(projectID int, formData ReqMR) (RespMR, err
 	return resp, nil
 }
 
-func (mr *RestMergeRequest) AcceptMR(projectID, mergeIID int, formData ReqAcceptMR) (RespAcceptMR, error) {
+func (mr *RestMergeRequest) AcceptMR(projectID interface{}, mergeIID int, formData ReqAcceptMR) (RespAcceptMR, error) {
 	path := fmt.Sprintf(PATH_ACCEPT_MR, mr.gitConfig.URL, projectID, mergeIID)
 	resp := RespAcceptMR{}
 
@@ -75,7 +75,7 @@ func (mr *RestMergeRequest) AcceptMR(projectID, mergeIID int, formData ReqAccept
 	return resp, nil
 }
 
-func (mr *RestMergeRequest) DeleteMR(projectID, mergeIID int) (RespAcceptMR, error) {
+func (mr *RestMergeRequest) DeleteMR(projectID interface{}, mergeIID int) (RespAcceptMR, error) {
 	path := fmt.Sprintf(PATH_DELETE_MR, mr.gitConfig.URL, projectID, mergeIID)
 	resp := RespAcceptMR{}
 

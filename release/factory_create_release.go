@@ -1,12 +1,12 @@
 package release
 
-import "strconv"
+import "fmt"
 
 type ReqUpdateRelease map[string]string
 
 // AddProjectID is a function for Add ProjectID value in ReqUpdateRelease type (*required)
-func (r *ReqUpdateRelease) AddProjectID(projectID int) *ReqUpdateRelease {
-	(*r)[KeyDataID] = strconv.Itoa(projectID)
+func (r *ReqUpdateRelease) AddProjectID(val interface{}) *ReqUpdateRelease {
+	(*r)[KeyDataID] = fmt.Sprintf("%v", val)
 	return r
 }
 

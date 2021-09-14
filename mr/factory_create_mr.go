@@ -1,6 +1,7 @@
 package mr
 
 import (
+	"fmt"
 	"strconv"
 )
 
@@ -8,8 +9,8 @@ import (
 type ReqMR map[string]string
 
 // AddProjectID is a function for Add ProjectID value in ReqMR type (*required)
-func (r *ReqMR) AddProjectID(val int) *ReqMR {
-	(*r)[KeyDataID] = strconv.Itoa(val)
+func (r *ReqMR) AddProjectID(val interface{}) *ReqMR {
+	(*r)[KeyDataID] = fmt.Sprintf("%v", val)
 	return r
 }
 
